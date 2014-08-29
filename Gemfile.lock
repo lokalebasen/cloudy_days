@@ -35,9 +35,11 @@ GEM
     net-ssh (2.8.0)
     nokogiri (1.6.1)
       mini_portile (~> 0.5.0)
+    rake (10.3.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
   fog
+  rake
