@@ -20,14 +20,14 @@ class CloudCopier
     end
   end
 
+  def ignore(*keys)
+    @ignored_directories += keys.flatten.map(&:to_s)
+  end
+
   private
 
   def ensure_backup_folder_exists
     FileUtils.mkdir_p(backup_folder_path)
-  end
-
-  def ignore(*keys)
-    @ignored_directories += keys.flatten.map(&:to_s)
   end
 
   def sync_dir(directory)

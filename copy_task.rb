@@ -7,10 +7,19 @@ class CopyTask
   def initialize(folder, fog)
     @backup_folder_path = folder
     @fog = fog
+    @cloud_copier = CloudCopier.new(fog, absolute_backup_folder_path)
+  end
+
+  def ignore_containers(containers)
+    @cloud_copier.ignore containers
+  end
+
+  def run
+    @cloud_copier.download_changes
   end
 
   def download_changes
-    CloudCopier.new(fog, absolute_backup_folder_path).download_changes
+    @cloud_copier
   end
 
   private
