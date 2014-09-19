@@ -1,7 +1,9 @@
 require 'fog'
+require 'logger'
 require_relative 'copy_task'
 
 STDOUT.sync = true
+LoggerService = Logger.new(STDOUT)
 
 # eg Fog::Storage.new(provider: 'Rackspace', rackspace_api_key: "7754dd1c0bf441feb3d8c8e6b01f1a5f", rackspace_username: 'niels.buus', rackspace_region: :lon)
 

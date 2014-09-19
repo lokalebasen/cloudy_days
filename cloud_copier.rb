@@ -12,9 +12,9 @@ class CloudCopier
   def download_changes
     fog.directories.each do |directory|
       if ignored_directories.include? directory.key
-        puts "Ignoring #{directory.key}."
+        LoggerService.info "Ignoring #{directory.key}."
       else
-        puts "Synchronizing #{directory.key}..."
+        LoggerService.info "Synchronizing #{directory.key}..."
         sync_dir(directory)
       end
     end

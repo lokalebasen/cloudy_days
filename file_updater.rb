@@ -12,7 +12,7 @@ class FileUpdater
       if local_file_is_outdated?
         update_file
       else
-        puts "#{path} is already in sync."
+        LoggerService.info "#{path} is already in sync."
       end
     else
       create_file
@@ -56,13 +56,14 @@ class FileUpdater
   end
 
   def update_file
-    puts "Writing #{path}"
+    LoggerService.info "Writing #{path}"
     local_file = File.open(path, 'w')
     cloud_file.directory.files.get(cloud_file.key) do |chunk, remaining, total|
+      completion = (((total - remaining) / total.to_f) * 100).to_i
       if chunk.length > 4096
-        puts "Writing chunk of #{chunk.length/1024} KB... #{remaining/1024} KB to go."
+        LoggerService.info "Writing chunk of #{chunk.length/1024} KB... #{remaining/1024} KB to go. #{completion}% done."
       else
-        puts "Writing chunk of #{chunk.length} bytes... #{remaining/1024} KB to go."
+        LoggerService.info "Writing chunk of #{chunk.length} bytes... #{remaining/1024} KB to go. #{completion}% done."
       end
       local_file.write chunk
     end
