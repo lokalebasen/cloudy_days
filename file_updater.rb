@@ -57,8 +57,14 @@ class FileUpdater
 
   def update_file
     puts "Writing #{path}"
-    File.open(path, 'w') do |local_file|
-      local_file.write(cloud_file.body)
+    local_file = File.open(path, 'w')
+    cloud_file.directory.files.get(cloud_file.key) do |chunk, remaining, total|
+      if chunk.length > 4096
+        puts "Writing chunk of #{chunk.length/1024} KB... #{remaining/1024} KB to go."
+      else
+        puts "Writing chunk of #{chunk.length} bytes... #{remaining/1024} KB to go."
+      end
+      local_file.write chunk
     end
   end
 
