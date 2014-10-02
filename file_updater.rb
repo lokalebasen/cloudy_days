@@ -12,7 +12,7 @@ class FileUpdater
       if local_file_is_outdated?
         update_file
       else
-        LoggerService.info "#{path} is already in sync."
+        # LoggerService.info "#{path} is already in sync."
       end
     else
       create_file
