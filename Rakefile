@@ -16,7 +16,7 @@ task :sync, :username, :api_key, :backup_folder, :ignored_containers do |t, rake
   api_key = args.fetch(:api_key)
   ignored_containers = args.fetch(:ignored_containers, '').split('|')
 
-  fog_storage = Fog::Storage.new(provider: 'Rackspace', rackspace_api_key: api_key, rackspace_username: username, rackspace_region: :lon)
+  fog_storage = Fog::Storage.new(provider: 'Rackspace', rackspace_api_key: api_key, rackspace_username: username, rackspace_region: :lon, connection_options: {chunk_size: 20_971_520})
 
   copy_task = CopyTask.new(backup_folder, fog_storage)
   copy_task.ignore_containers ignored_containers
