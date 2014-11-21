@@ -52,7 +52,7 @@ class FileUpdater
   end
 
   def local_file_size
-    File.size?(path)
+    File.size?(path).to_i # Returns nil for 0 length.
   end
 
   def update_file
