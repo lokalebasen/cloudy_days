@@ -56,16 +56,20 @@ class FileUpdater
   end
 
   def update_file
-    LoggerService.info "Writing #{path}"
-    local_file = File.open(path, 'w')
-    cloud_file.directory.files.get(cloud_file.key) do |chunk, remaining, total|
-      completion = (((total - remaining) / total.to_f) * 100).to_i
-      if chunk.length > 4096
-        LoggerService.info "Writing chunk of #{chunk.length/1024} KB... #{remaining/1024} KB to go. #{completion}% done."
-      else
-        LoggerService.info "Writing chunk of #{chunk.length} bytes... #{remaining/1024} KB to go. #{completion}% done."
+    if cloud_file.content_type == "application/directory"
+      LoggerService.info "Creating directory #{path}"
+    else
+      LoggerService.info "Writing #{path}"
+      local_file = File.open(path, 'w')
+      cloud_file.directory.files.get(cloud_file.key) do |chunk, remaining, total|
+        completion = (((total - remaining) / total.to_f) * 100).to_i
+        if chunk.length > 4096
+          LoggerService.info "Writing chunk of #{chunk.length/1024} KB... #{remaining/1024} KB to go. #{completion}% done."
+        else
+          LoggerService.info "Writing chunk of #{chunk.length} bytes... #{remaining/1024} KB to go. #{completion}% done."
+        end
+        local_file.write chunk
       end
-      local_file.write chunk
     end
   end
 
